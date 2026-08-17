@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block titulo %}Categorías — App de Recetas{% endblock %}
+
+{% block contenido %}
+<h1>Categorías</h1>
+
+<form class="form-inline" method="post" action="{{ url_for('categorias.nueva') }}">
+    <input type="text" name="nombre" placeholder="Nombre de la categoría" required>
+    <button type="submit" class="btn">Crear categoría</button>
+</form>
+
+{% if categorias %}
+    <ul class="lista-categorias">
+        {% for cat in categorias %}
+            <li>{{ cat.nombre }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p class="vacio">Aún no hay categorías.</p>
+{% endif %}
+{% endblock %}

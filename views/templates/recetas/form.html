@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block titulo %}{% if modo == 'editar' %}Editar receta{% else %}Nueva receta{% endif %} — App de Recetas{% endblock %}
+
+{% block contenido %}
+<h1>{% if modo == 'editar' %}Editar receta{% else %}Nueva receta{% endif %}</h1>
+
+<form class="form-receta" method="post" action="{% if modo == 'editar' %}{{ url_for('recetas.editar', receta_id=receta_id) }}{% else %}{{ url_for('recetas.nueva') }}{% endif %}">
+    <label for="nombre">Nombre *</label>
+    <input type="text" id="nombre" name="nombre" value="{{ receta.nombre if receta else '' }}" required>
+
+    <label for="descripcion">Descripción</label>
+    <textarea id="descripcion" name="descripcion" rows="2">{{ receta.descripcion if receta and receta.descripcion else '' }}</textarea>
+
+    <label for="ingredientes">Ingredientes * (uno por línea)</label>
+    <textarea id="ingredientes" name="ingredientes" rows="6" required>{{ receta.ingredientes if receta else '' }}</textarea>
+
+    <label for="pasos">Pasos * (uno por línea)</label>
+    <textarea id="pasos" name="pasos" rows="6" required>{{ receta.pasos if receta else '' }}</textarea>
+
+    <div class="form-fila">
+        <div>
+            <label for="tiempo_preparacion">Tiempo de preparación (min)</label>
+            <input type="number" id="tiempo_preparacion" name="tiempo_preparacion" min="0"
+                   value="{{ receta.tiempo_preparacion if receta and receta.tiempo_preparacion else '' }}">
+        </div>
+        <div>
+            <label for="porciones">Porciones</label>
+            <input type="number" id="porciones" name="porciones" min="0"
+                   value="{{ receta.porciones if receta and receta.porciones else '' }}">
+        </div>
+    </div>
+
+    <label for="categoria_id">Categoría</label>
+    <select id="categoria_id" name="categoria_id">
+        <option value="">Sin categoría</option>
+        {% for cat in categorias %}
+            <option value="{{ cat.id }}" {% if receta and receta.categoria_id == cat.id %}selected{% endif %}>{{ cat.nombre }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="acciones">
+        <button type="submit" class="btn">{% if modo == 'editar' %}Guardar cambios{% else %}Crear receta{% endif %}</button>
+    </div>
+</form>
+{% endblock %}

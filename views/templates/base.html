@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block titulo %}App de Recetas{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <a class="navbar-brand" href="{{ url_for('recetas.index') }}">🍲 App de Recetas</a>
+        <nav>
+            <a href="{{ url_for('recetas.index') }}">Recetas</a>
+            <a href="{{ url_for('categorias.index') }}">Categorías</a>
+            <a class="btn-nuevo" href="{{ url_for('recetas.nueva') }}">+ Nueva receta</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% if mensajes %}
+                <ul class="flash-messages">
+                    {% for categoria, mensaje in mensajes %}
+                        <li class="flash flash-{{ categoria }}">{{ mensaje }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block contenido %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block titulo %}{{ receta.nombre }} — App de Recetas{% endblock %}
+
+{% block contenido %}
+<a class="volver" href="{{ url_for('recetas.index') }}">&larr; Volver al listado</a>
+
+<h1>{{ receta.nombre }}</h1>
+
+<p class="tarjeta-meta">
+    {% if receta.categoria_nombre %}<span class="etiqueta">{{ receta.categoria_nombre }}</span>{% endif %}
+    {% if receta.tiempo_preparacion %}<span>⏱ {{ receta.tiempo_preparacion }} min</span>{% endif %}
+    {% if receta.porciones %}<span>🍽 {{ receta.porciones }} porciones</span>{% endif %}
+</p>
+
+{% if receta.descripcion %}
+    <p class="descripcion">{{ receta.descripcion }}</p>
+{% endif %}
+
+<div class="detalle-columnas">
+    <section>
+        <h2>Ingredientes</h2>
+        <ul>
+            {% for linea in receta.ingredientes.splitlines() if linea.strip() %}
+                <li>{{ linea }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section>
+        <h2>Pasos</h2>
+        <ol>
+            {% for linea in receta.pasos.splitlines() if linea.strip() %}
+                <li>{{ linea }}</li>
+            {% endfor %}
+        </ol>
+    </section>
+</div>
+
+<div class="acciones">
+    <a class="btn" href="{{ url_for('recetas.editar', receta_id=receta.id) }}">Editar</a>
+    <form method="post" action="{{ url_for('recetas.eliminar', receta_id=receta.id) }}"
+          onsubmit="return confirm('¿Eliminar esta receta? Esta acción no se puede deshacer.');">
+        <button type="submit" class="btn btn-peligro">Eliminar</button>
+    </form>
+</div>
+{% endblock %}
